@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .option.selected {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 3px;
+      background-color: #4caf50;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const Quiz = () => {
+      const [selectedAnswers, setSelectedAnswers] = React.useState({
+        question1: null,
+        question2: null,
+        question3: null,
+      });
+      const [showScore, setShowScore] = React.useState(false);
+      const [score, setScore] = React.useState(0);
+
+      const questions = [
+        {
+          id: 'question1',
+          text: 'What is the capital of India?',
+          options: ['London', 'New Delhi', 'Berlin', 'Madrid'],
+          answer: 'New Delhi',
+        },
+        {
+          id: 'question2',
+          text: 'Who is known as Mr.360 in IPL?',
+          options: ['Raina', 'Rohit ', 'Narine', 'Kohli'],
+          answer: 'Kohli',
+        },
+        {
+          id: 'question3',
+          text: 'Which is the smallest continent?',
+          options: ['Asia', 'Australia', 'Europe', 'Africa'],
+          answer: 'Australia',
+        },
+      ];
+
+      const handleOptionChange = (questionId, option) => {
+        setSelectedAnswers((prevState) => ({
+          ...prevState,
+          [questionId]: option,
+        }));
+      };
+
+      const handleSubmit = () => {
+        let newScore = 0;
+        questions.forEach((question) => {
+          if (selectedAnswers[question.id] === question.answer) {
+            newScore++;
+          }
+        });
+        setScore(newScore);
+        setShowScore(true);
+      };
+
+      return (
+        <div className="quiz-container">
+          <h2>Quiz App</h2>
+          {!showScore ? (
+            <>
+              {questions.map((question) => (
+                <div key={question.id} className="question">
+                  <h3>{question.text}</h3>
+                  <div className="options">
+                    {question.options.map((option) => (
+                      <div
+                        key={option}
+                        className={`option ${
+                          selectedAnswers[question.id] === option ? 'selected' : ''
+                        }`}
+                        onClick={() => handleOptionChange(question.id, option)}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <button onClick={handleSubmit}>Submit</button>
+            </>
+          ) : (
+            <div>
+              <h3>Your Score: {score} / {questions.length}</h3>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.render(<Quiz />, document.getElementById('root'));
+  </script>
+</body>
+</html>

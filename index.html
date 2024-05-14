@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Picker</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Include React and Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+
+
+  <script type="text/babel">
+    // Define a simple ColorPicker component
+    class ColorPicker extends React.Component {
+      constructor(props) {
+        super(props);
+        // Set initial state with default color and no error
+        this.state = {
+          color: '#FFFFFF',
+          error: ''
+        };
+      }
+
+      // Function to handle input change
+      handleInputChange = (event) => {
+        // Get the entered color value
+        const color = event.target.value;
+        // Validate the color format
+        if (/^#[0-9A-F]{6}$/i.test(color)) {
+          // Update state with the valid color and clear any error
+          this.setState({ color, error: '' });
+        } else {
+          // If color format is invalid, show error message
+          this.setState({ error: 'Invalid color code' });
+        }
+      };
+
+      render() {
+        return (
+          <div>
+            {/* Input field for entering color */}
+            <input
+              type="text"
+              value={this.state.color}
+              onChange={this.handleInputChange}
+            />
+            {/* Preview div showing the color */}
+            <div
+              style={{
+                width: '100px',
+                height: '100px',
+                backgroundColor: this.state.color,
+                marginTop: '10px'
+              }}
+            ></div>
+            {/* Show error message if any */}
+            {this.state.error && <p>{this.state.error}</p>}
+          </div>
+        );
+      }
+    }
+
+    // Render the ColorPicker component
+    ReactDOM.render(<ColorPicker />, document.getElementById('root'));
+  </script>
+</body>
+</html>
+
